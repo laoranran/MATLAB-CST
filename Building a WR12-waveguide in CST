@@ -1,3 +1,10 @@
+% in this file, a WR12-waveguide will be constructed in CST by MATLAB,
+% you can use this single file to build the waveguide in CST without any other functions,
+% of cource, in order to use MATLAB to control CST more conveniently, we can define some basical functions in MATLAB,
+% however, for this simple model, we do not need such a complex methods,
+% this single MATLAB code can help you understand the primary pricinple of MATLAB-CST API.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 cst = actxserver('CSTStudio.application');
 mws = invoke(cst, 'NewMWS');
 app = invoke(mws, 'GetApplicationName');
