@@ -1,7 +1,7 @@
 %this file will present the code on how to change the parameter in a former-built CST model
 %and how to export relevant files from CST
 %in order to run this code successfully, you should have an exsisted CST model.
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 cst = actxserver('CSTStudio.application');  %the first step is to start the control mode, 'actxserver' is a function in MATLAB
 mws = invoke(cst, 'NewMWS');  %and build a MWS
