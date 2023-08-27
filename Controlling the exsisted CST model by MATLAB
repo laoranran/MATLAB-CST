@@ -1,0 +1,36 @@
+%this file will present the code on how to change the parameter in a former-built CST model
+%and how to export relevant files from CST
+%in order to run this code successfully, you should have an exsisted CST model.
+
+
+cst = actxserver('CSTStudio.application');  %the first step is to start the control mode, 'actxserver' is a function in MATLAB
+mws = invoke(cst, 'NewMWS');  %and build a MWS
+app = invoke(mws, 'GetApplicationName');  %getting the present application's name
+ver = invoke(mws, 'GetApplicationVersion');  %getting the present application's version
+fullfilename = 'E:\CST workplace\wr12.cst';  %the path of CST model which will be modified
+invoke(mws, 'OpenFile', fullfilename);  %and then open it
+
+for width = 3.1:0.1:3.5;  %be noted, 'width' is a parameter which exsisted in the CST model. What we do here is changing its value step by step
+    changeValue = invoke(mws, 'StoreParameter', 'width', num2str(width));  %replace the new value of 'width' into the model
+    invoke(mws, 'Rebuild');  %and refresh the model
+    
+    solver = invoke(mws, 'Solver');  %start the 'solver'
+    invoke(solver, 'Start');
+
+    %what we do below is to sweep the name of 'S-Parameter' which contains 'S1,1', 'S1,2', 'S2,1', 'S2,2'
+    %each iteration just exports one 'S-Parameter' file
+    %as a result, we need to iterate 4 times in order to export all four 'S-Parameter' files
+    n = 1;
+    while n <= 2;
+        m = 1;
+        while m <= 2;
+            SelectTreeItem = invoke(mws,'SelectTreeItem',['1D Results\S-Parameters\S', num2str(n), ',', num2str(m)]);
+            export = invoke(mws, 'ASCIIExport');
+            invoke(export, 'Reset');
+            invoke(export, 'FileName', ['width=', num2str(width), ',S-Para', num2str(n), num2str(m)]);  %define exported file name
+            invoke(export, 'Execute');
+            m = m + 1;
+        end;
+        n = n + 1;
+    end
+end
