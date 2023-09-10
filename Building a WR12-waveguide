@@ -5,6 +5,9 @@
 % this single MATLAB code can help you understand the primary pricinple of MATLAB-CST API.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% codes below are used to active your CST software, including the studio which you will use,
+% the path and the name of CST project you are creating are also can be set in the codes below.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cst = actxserver('CSTStudio.application');
 mws = invoke(cst, 'NewMWS');
 app = invoke(mws, 'GetApplicationName');
@@ -15,6 +18,8 @@ filename = '\chenny.cst';
 fullname = [path, filename];
 invoke(mws, 'SaveAs', fullname, 'True');
 
+% the codes below are used to set the UNITS in CST file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 units = invoke(mws, 'Units');
 invoke(units, 'Geometry', 'mm');
 invoke(units, 'Frequency', 'GHz');
@@ -28,11 +33,15 @@ invoke(units, 'Capacitance', 'PikoF');
 invoke(units, 'Inductance', 'NanoH');
 release(units);
 
+% you can define the frequency range in this part
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 freqMin = 60;
 freqMax = 70;
 freq = invoke(mws, 'Solver');
 invoke(freq, 'FrequencyRange', int2str(freqMin), int2str(freqMax));
 
+% the size of the wavetube(WR12) can be defined
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 width = 3.1;
 height = 1.5;
 L = 10;
@@ -47,10 +56,16 @@ invoke(brick, 'Zrange', int2str(-L / 2), int2str(L / 2));
 invoke(brick, 'Create');
 release(brick);
 
+% first, you should pick the face of the wavetube
+% be noted that the face is indexed by number. If different number is chosen, the different face will be picked
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pick = invoke(mws, 'Pick');
 invoke(pick, 'PickFaceFromId', 'component1:brick', '1');
 release(pick);
 
+% after picking the face, the port where microwave will transmit can be defined
+% some relevant parameters can be seen in this part
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 port = invoke(mws, 'Port');
 invoke(port, 'Reset');
 invoke(port, 'PortNumber', '1');
@@ -77,6 +92,7 @@ invoke(port, 'WaveguideMonitor', 'False');
 invoke(port, 'Create');
 release(port);
 
+% pick another face and set to be the export.
 pick = invoke(mws, 'Pick');
 invoke(pick, 'PickFaceFromId', 'component1:brick', '2');
 release(pick);
